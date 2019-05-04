@@ -7,7 +7,7 @@ import math
 
 
 def eye_aspect_ratio(eye):
-	"""Method return Eye Aspect Ratio."""
+	"""Method returns Eye Aspect Ratio."""
 	A = dist.euclidean(eye[1], eye[5])
 	B = dist.euclidean(eye[2], eye[4])
 	C = dist.euclidean(eye[0],eye[3])
@@ -16,6 +16,7 @@ def eye_aspect_ratio(eye):
 
 
 def mouth_aspect_ratio(mouth):
+	"""Method returns Mouth Aspect Ratio."""
 	A = dist.euclidean(mouth[13], mouth[19])
 	B = dist.euclidean(mouth[14], mouth[18])
 	C = dist.euclidean(mouth[15], mouth[17])
