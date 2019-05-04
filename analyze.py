@@ -84,11 +84,27 @@ elif args["action"] == "si":
 	if args["serialized"] == "" or args["image"] == "":
 		print("[ERROR] NO SERIALIZED MODEL OR IMAGE PATH PROVIDED.")
 		exit()
-	#
-	# Write this!
-	#
-	pass
 
+	print("[INFO] loading facial landmark predictor...")
+	detector = dlib.get_frontal_face_detector()
+	predictor = dlib.shape_predictor(args["shape_predictor"])
+	print("[INFO] detecting emoton on image...")
+
+	model = load(args['serialized'])
+	load_image = cv2.imread(args["image"])
+	load_image = imutils.resize(load_image, width=562)
+	image = Image(load_image, detector)
+	rects = image.detect_faces()
+	for rect in rects:
+		face = Face(image.gray, rect, predictor)
+		prediction = model.predict([face.extract_features()])
+		(x, y, w, h) = face_utils.rect_to_bb(rect)
+		cv2.rectangle(load_image, (x,y), (x+w, y+h), (0,255,0),2)
+		cv2.putText(load_image, "###{}".format(model.le.inverse_transform(prediction)[0]), (x - 10, y - 10),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+	
+	cv2.imshow("Frame", load_image)
+	print("[INFO] press Enter to exit.")
+	cv2.waitKey(0)
 
 
 elif args["action"] == "d":

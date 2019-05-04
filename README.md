@@ -26,9 +26,10 @@ Or use standard pip3:
 pip3 install --requirements
 ```
 
-To properly install dlib library please refer to the guideline prepared by Adrian from [Pyimagesearch.com](https://www.pyimagesearch.com). 
+To properly install dlib and opencv libraries please refer to the guidelines prepared by Adrian Rosebrock from [Pyimagesearch.com](https://www.pyimagesearch.com). 
 
 https://www.pyimagesearch.com/2018/01/22/install-dlib-easy-complete-guide/
+https://www.pyimagesearch.com/2016/10/24/ubuntu-16-04-how-to-install-opencv/
 
 ## Usage
 
@@ -53,11 +54,13 @@ python analyze.py --help
 
 ## Demo
 
-Please see below the demo of final model prediction.
+Please see below the demo of final emotion prediction.
 
 TBF
 
 ## Solution Overview
+
+The chapter presents the solution overview. Each chapter describes the method and/or workflow how each step was implemented. Please see the diagrams describing the overall emotion detection procedure and the diagram describing the workflow of training the model.
 
 TBF
 
@@ -80,3 +83,10 @@ TBF
 ## Contact
 
 If you would like to ask me a question, please contact me: pat049b@gmail.com.
+
+## To Do
+
+- [ ] Write a docsting for each class and each method in utils.
+- [ ] Implement Feature Selection, implement checking feature importance with plotting.
+- [ ] Implement good model choosing with metrics and plotting - analyze.py -a tt
+- [ ] Finish README - record a demo, add drawings and diagrams.
