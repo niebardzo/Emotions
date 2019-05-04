@@ -28,6 +28,23 @@ args = vars(ap.parse_args())
 
 emotion_labels = ['AF','AN','DI','HA','NE','SA','SU']
 
+def change_label(label):
+	if label == 'AF':
+		return 'Affraid'
+	if label == 'AN':
+		return 'Angry'
+	if label == 'DI':
+		return 'Disgust'
+	if label == 'HA':
+		return 'Happy'
+	if label == 'NE':
+		return 'Neutral'
+	if label == 'SA':
+		return 'Sad'
+	if label == 'SU':
+		return 'Surprised'
+
+
 if args["action"][:1] == "t":
 	data = load('databases/data.joblib')
 	labels = load('databases/labels.joblib')
@@ -51,7 +68,8 @@ if args["action"][:1] == "t":
 				"naive_bayes",
 				"svm",
 				"decision_tree",
-				"random_forest"
+				"random_forest",
+				"extra_tree"
 			]
 
 		for model_name in model_names:
@@ -101,7 +119,7 @@ elif args["action"] == "d":
 			if label not in emotion_labels:
 				continue
 			data.append(face.extract_features())
-			labels.append(label)
+			labels.append(change_label(label))
 
 
 	dump(data, 'databases/data.joblib')

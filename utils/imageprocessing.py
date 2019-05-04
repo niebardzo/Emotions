@@ -90,7 +90,7 @@ class Face(object):
 		self.mouth = self.extract_part("mouth")
 
 		self.gravity_point = self.calculate_face_gravity_center()
-		self.normalizer = self.count_normalizer()
+		self.normalizer = self.calculate_normalizer()
 
 		self.features = []
 
@@ -99,10 +99,6 @@ class Face(object):
 		shape = face_utils.shape_to_np(shape)
 		return shape
 
-	def calculate_offset(self):
-		center = self.shape[27] - self.shape[33]
-		angle = np.degrees(np.arctan2(center[0],center[1])) - 180
-		return angle
 
 	def calculate_face_gravity_center(self):
 		return self.shape.mean(axis=0).astype("int")
@@ -111,7 +107,7 @@ class Face(object):
 		(Start, End) = face_utils.FACIAL_LANDMARKS_IDXS[part]
 		return self.shape[Start:End]
 
-	def count_normalizer(self):
+	def calculate_normalizer(self):
 		left_eye_center = self.left_eye.mean(axis=0).astype("int")
 		right_eye_center = self.right_eye.mean(axis=0).astype("int")
 		A = dist.euclidean(left_eye_center, self.gravity_point)

@@ -16,6 +16,9 @@ import imutils
 from joblib import dump, load
 
 
+def most_common(lst):
+	return max(set(lst), key=lst.count)
+
 ap = argparse.ArgumentParser()
 ap.add_argument("-p", "--shape-predictor", required=True,
 	help="path to facial landmark predictor")
@@ -36,6 +39,8 @@ time.sleep(1.0)
 print("[INFO] loading emotions model...")
 model = load(args['model'])
 
+buff = []
+
 while True:
 	frame = vs.read()
 	frame = imutils.resize(frame, width=562)
@@ -44,23 +49,21 @@ while True:
 
 	for (i, rect) in enumerate(rects):
 		face = Face(image.gray, rect, predictor)
-		
-		prediction = model.predict([face.extract_features()])
 
-		print(model.le.inverse_transform(prediction))
+		prediction = model.predict([face.extract_features()])
+		buff.insert(0 ,prediction[0])
+
+		if len(buff) >= 10:
+			buff.pop()
+			prediction = [most_common(buff)]
+
+
+		#print(model.le.inverse_transform(prediction))
 
 		(x, y, w, h) = face_utils.rect_to_bb(rect)
-
 		cv2.rectangle(frame, (x,y), (x+w, y+h), (0,255,0),2)
-		
 
-
-		cv2.putText(frame, "Face #{}".format(model.le.inverse_transform(prediction)[0]), (x - 10, y - 10),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-
-
-		#cv2.circle(frame, (face.gravity_point[0], face.gravity_point[1]), 1, (0, 0, 255), -1)
-		#for (x, y) in face.shape:
-		#	cv2.circle(frame, (x, y), 1, (0, 0, 255), -1)
+		cv2.putText(frame, "###{}".format(model.le.inverse_transform(prediction)[0]), (x - 10, y - 10),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
 
 	cv2.imshow("Frame", frame)
