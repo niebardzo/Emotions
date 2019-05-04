@@ -7,6 +7,7 @@ import math
 
 
 def eye_aspect_ratio(eye):
+	"""Method return Eye Aspect Ratio."""
 	A = dist.euclidean(eye[1], eye[5])
 	B = dist.euclidean(eye[2], eye[4])
 	C = dist.euclidean(eye[0],eye[3])
@@ -29,37 +30,31 @@ class Image(object):
 	
 	Attributes:
 	-----------
-	image: binary
-		Binary representation of image.
+	image: object.
+		Opencv object representing the loaded image.
+
+	gray: object.
+		Opencv object representing the loaded image in gray scale.
 
 	detector: object
 		Dlib frontal face detector object.
 
-	predictor: object
-		Dlib shape precidtor object.
-
-	Methods:
-	--------
-	
 	"""
 
 	def __init__(self, image, detector):
-		"""Consutructor of the class that handles images, """
-		self.image = image
-		self.gray = image
-		self.resize()
-		self.to_gray()
+		"""Consutructor of the class that handles images."""
+		self.image = imutils.resize(image, width=562)
+		self.gray = self.generate_gray()
 		self.detector = detector
 		
 	def detect_faces(self):
+		"""Method that returns faces detected on the image itself."""
 		rects = self.detector(self.gray, 1)
 		return rects
 
-	def resize(self):
-		self.image = imutils.resize(self.image, width=562)
-
-	def to_gray(self):
-		self.gray = cv2.cvtColor(self.gray, cv2.COLOR_BGR2GRAY)
+	def generate_gray(self):
+		"""Image that generate the grayscale object opencv."""
+		return cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
 
 
 
@@ -69,18 +64,23 @@ class Face(object):
 
 	Attributes:
 	-----------
+	predictor: object
+		A landmark predictor used to get the face landmark.
 	shape: array
-		Numpy Array representation of the Face.
-
+		Array represents face landmark.
+	face_parts: arrays
+		Subarrays of shape describing face parts.
+	gravity_point: array
+		X,Y array represents gravity point of the face.
+	normalizer: float
+		Value to normalize features.
 	features: array
-		Array of Features.
-
-	Methods:
-	--------
+		Array with all face features.
 
 	"""
 
 	def __init__(self, gray, rect, predictor):
+		"""Constructor of the class describing face. Setting up all necassary attributes."""
 		self.predictor = predictor
 		self.shape = self.get_landmark(gray, rect)
 		self.left_eye = self.extract_part("left_eye")
@@ -95,19 +95,23 @@ class Face(object):
 		self.features = []
 
 	def get_landmark(self, gray, rect):
+		"""Method returns face landmark."""
 		shape = self.predictor(gray, rect)
 		shape = face_utils.shape_to_np(shape)
 		return shape
 
 
 	def calculate_face_gravity_center(self):
+		"""Method returns the face gravity center."""
 		return self.shape.mean(axis=0).astype("int")
 
 	def extract_part(self, part):
+		"""Method returns the subarray of face landmark."""
 		(Start, End) = face_utils.FACIAL_LANDMARKS_IDXS[part]
 		return self.shape[Start:End]
 
 	def calculate_normalizer(self):
+		"""Method returns face normalizer."""
 		left_eye_center = self.left_eye.mean(axis=0).astype("int")
 		right_eye_center = self.right_eye.mean(axis=0).astype("int")
 		A = dist.euclidean(left_eye_center, self.gravity_point)
@@ -115,6 +119,7 @@ class Face(object):
 		return (A+B)/2.0
 
 	def get_eyes_features(self):
+		"""Method that appends to the features attribute all eyes features."""
 		left_eye_center = self.left_eye.mean(axis=0).astype("int")
 		
 		left_1 = dist.euclidean(self.left_eyebrow[0], left_eye_center)/self.normalizer
@@ -138,6 +143,7 @@ class Face(object):
 		self.features.append(right_3)
 
 	def get_mouth_features(self):
+		"""Method that appends to the features attributes all mouth features."""
 		self.features.append(mouth_aspect_ratio(self.mouth))
 
 		mouth_1 = dist.euclidean(self.mouth[3], self.gravity_point)/self.normalizer
@@ -152,6 +158,7 @@ class Face(object):
 
 
 	def extract_features(self):
+		"""Method returns the features of the face."""
 		self.get_eyes_features()
 		self.get_mouth_features()
 		return self.features
