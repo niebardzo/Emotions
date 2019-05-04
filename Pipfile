@@ -13,6 +13,7 @@ pygame = "*"
 joblib = "*"
 tqdm = "*"
 opencv-contrib-python = "*"
+matplotlib = "*"
 
 [dev-packages]
 

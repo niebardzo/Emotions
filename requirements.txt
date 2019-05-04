@@ -13,6 +13,7 @@
 dlib
 imutils
 joblib
+matplotlib
 numpy
 opencv-contrib-python
 pygame
