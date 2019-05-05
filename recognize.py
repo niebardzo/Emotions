@@ -58,8 +58,6 @@ while True:
 			prediction = [most_common(buff)]
 
 
-		#print(model.le.inverse_transform(prediction))
-
 		(x, y, w, h) = face_utils.rect_to_bb(rect)
 		cv2.rectangle(frame, (x,y), (x+w, y+h), (0,255,0),2)
 

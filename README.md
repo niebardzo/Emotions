@@ -3,10 +3,11 @@
 ## Introduction
 
 The project was reliazied as a part of Master Thesis on AGH. The purpose of the project was to create the emotion recognition application with the usage of Machine Learning methods. To achive the goal the part of Karolinska Directed Emotional Faces dataset ([KDEF](http://www.kdef.se/)) have been used. The dataset contains the photos of each emotions representation (only the frontal face image have been used - 980 samples; 140 samples for each emotion). To extract the facial landmark dlib library have been used with the pretrained model for facial landmark detection.
+
 The facial landmark detector included in the dlib library is an implementation of the One Millisecond Face Alignment with an Ensemble of Regression Trees paper by Kazemi and Sullivan (2014).
 The landmark can be download [here](http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2), also it is included in the repository under **models/shape.dat**.
-The method for extracting features and normalization have been presented in the Features Extraction chapter.
 
+The method for extracting features and normalization have been presented in the Features Extraction chapter.
 Features extracted with the labels are numpy objects serialized in the folder **databases**. The final emotion classification model is serialized under the **models/emotiion.joblib**.
 
 ## Requirements
@@ -66,15 +67,20 @@ TBF
 
 ### Features Extraction
 
+To properly analyze the image, the face features have to be extracted. The class Face have been implemented to extract the face features. There are 4 features extracted for each eye region and 5 features extracted for mouth region which gives 13 features in total. The features are normalized with the normalizer caluculated based on the sum of the eucilidean distance between face gravity center point and center of each eye divide by 2.0.
+
+IMAGE
+
+
+
+### Feature Importance/Selection
+
 TBF
 
 ### Choosing the right model
 
 TBF
 
-### Feature Importance/Selection
-
-TBF
 
 ### Results
 

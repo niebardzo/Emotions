@@ -23,8 +23,27 @@ from sklearn.feature_selection import SelectFromModel
 
 
 class Model(object):
+	"""
+	Class that representats the model.
+
+	Attributes:
+	le: object
+		Object of Label Encoder
+	model: object
+		Object of sklearn model of choice.
+	training_data: array
+		Array of data.
+	training_labels: array
+		Encoded labels for training data.
+	test_data: array
+		Array of test data. Initially empty.
+	test_labels: array
+		Array of test labels. Initially empty.
+
+	"""
 
 	def __init__(self, model, data=None, labels=None):
+		"""Constructor for model class."""
 		if data is None or labels is None:
 			raise AttributeError("No Data in a constructor provided.")
 
@@ -48,15 +67,19 @@ class Model(object):
 
 
 	def split_dataset(self, test_size=0.20):
+		"""Method for spliting dataset to the training and test."""
 		(self.training_data, self.test_data, self.training_labels, self.test_labels) = train_test_split(self.training_data, self.training_labels, test_size=test_size)
 
 	def train(self):
+		"""Method for training a model with the training dataset."""
 		self.model.fit(self.training_data, self.training_labels)
 
 	def test(self):
+		"""Method returns the classification report."""
 		return classification_report(self.test_labels, self.predict(self.test_data), target_names=self.le.classes_)
 
 	def predict(self, to_predict):
+		"""Method returns the prefiction for new data."""
 		return self.model.predict(to_predict)
 
 	def univariate_feature_selection(self, method, scoring):
