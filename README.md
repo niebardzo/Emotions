@@ -77,7 +77,7 @@ IMAGE
 The first point is to visualize the data that we have collected, for that purpose we utilize the functionallity of yellowbrick library for ML Visualization.
 
 
-![RadViz_Init](https://raw.githubusercontent.com/niebardzo/Emotions/master/static/init_data.png)
+![RadViz_Init](../blob/master/static/init_data.png)
 
 ![Para_Init](https://raw.githubusercontent.com/niebardzo/Emotions/master/static/init_paraller_coordinates.png)
 
