@@ -72,27 +72,61 @@ To properly analyze the image, the face features have to be extracted. The class
 IMAGE
 
 
+### Feature Engineering
 
-### Feature Importance/Selection
+The first point is to visualize the data that we have collected, for that purpose we utilize the functionallity of yellowbrick library for ML Visualization.
+
+
+![RadViz_Init](https://raw.githubusercontent.com/niebardzo/Emotions/master/static/init_data.png)
+
+![Para_Init](https://raw.githubusercontent.com/niebardzo/Emotions/master/static/init_paraller_coordinates.png)
+
+and zoomed image:
+
+![RadViz_Init_Zoomed](https://raw.githubusercontent.com/niebardzo/Emotions/master/static/init_data_zoomed.png)
+
+As we can see there is not enough spread of the data to easly distinguish between the right final class. To build the right model we should proceed with feature selection. First we evalued which features are correlated with each other by couting the pearson correlation between the features.
+
+![Pearson](https://raw.githubusercontent.com/niebardzo/Emotions/master/static/init_pearson.png)
+
+As we can see the EAR left and EAR right possess the same information, it is because all of image faces are symetrical. The same approach is visiable in the distance between the center of the eye and eyebrow for left and right eye. The conclusion for that is that the model will be only valid for the symetric faces. At the moment, we could get rid of half of the features representing one side of the face. But let's proceed with feature analytics. Let's check the feature corelation with dependant variable:
+
+![Dependent_corelations](https://raw.githubusercontent.com/niebardzo/Emotions/master/static/init_corelations.png)
+
+It is clearly visiable that we can get rid off 5 least significat features and then see the data spreading again for 8 features:
+
+![8_features_data](https://raw.githubusercontent.com/niebardzo/Emotions/master/static/8_data.png)
+
+![8_features_paral](https://raw.githubusercontent.com/niebardzo/Emotions/master/static/8_paraller.png)
+
+and zoomed image:
+
+![8_features_data_zoomed](https://raw.githubusercontent.com/niebardzo/Emotions/master/static/8_data_zoomed.png)
+
+It looks better, additionally if we consider that angry, sad and affraid emotions as "dissatisfied" we could achive better accuracy on that emotion.
+
+
+Saying that always 8 features will be selected out of 13 initial features. The selection is done in the pipeline.
+
+
+### Model Selection and Evaluation
 
 TBF
 
-### Choosing the right model
+
+### Hyperparameter Tunning
 
 TBF
 
 
-### Results
-
-TBF
 
 ## Contact
 
-If you would like to ask me a question, please contact me: pat049b@gmail.com.
+If you would like to ask me a question, please contact me: niebardzo@gmail.com.
 
 ## To Do
 
 - [ ] Write a docsting for each class and each method in utils.
-- [ ] Implement Feature Selection, implement checking feature importance with plotting.
+- [x] Implement Feature Selection, implement checking feature importance with plotting.
 - [ ] Implement good model choosing with metrics and plotting - analyze.py -a tt
 - [ ] Finish README - record a demo, add drawings and diagrams.
