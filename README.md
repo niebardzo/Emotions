@@ -79,29 +79,29 @@ The first point is to visualize the data that we have collected, for that purpos
 
 ![RadViz_Init](../master/static/init_data.png)
 
-![Para_Init](https://raw.githubusercontent.com/niebardzo/Emotions/master/static/init_paraller_coordinates.png)
+![Para_Init](../master/static/init_paraller_coordinates.png)
 
 and zoomed image:
 
-![RadViz_Init_Zoomed](https://raw.githubusercontent.com/niebardzo/Emotions/master/static/init_data_zoomed.png)
+![RadViz_Init_Zoomed](../master/static/init_data_zoomed.png)
 
 As we can see there is not enough spread of the data to easly distinguish between the right final class. To build the right model we should proceed with feature selection. First we evalued which features are correlated with each other by couting the pearson correlation between the features.
 
-![Pearson](https://raw.githubusercontent.com/niebardzo/Emotions/master/static/init_pearson.png)
+![Pearson](../master/static/init_pearson.png)
 
 As we can see the EAR left and EAR right possess the same information, it is because all of image faces are symetrical. The same approach is visiable in the distance between the center of the eye and eyebrow for left and right eye. The conclusion for that is that the model will be only valid for the symetric faces. At the moment, we could get rid of half of the features representing one side of the face. But let's proceed with feature analytics. Let's check the feature corelation with dependant variable:
 
-![Dependent_corelations](https://raw.githubusercontent.com/niebardzo/Emotions/master/static/init_corelations.png)
+![Dependent_corelations](../master/static/init_corelations.png)
 
 It is clearly visiable that we can get rid off 5 least significat features and then see the data spreading again for 8 features:
 
-![8_features_data](https://raw.githubusercontent.com/niebardzo/Emotions/master/static/8_data.png)
+![8_features_data](../master/static/8_data.png)
 
-![8_features_paral](https://raw.githubusercontent.com/niebardzo/Emotions/master/static/8_paraller.png)
+![8_features_paral](../master/static/8_paraller.png)
 
 and zoomed image:
 
-![8_features_data_zoomed](https://raw.githubusercontent.com/niebardzo/Emotions/master/static/8_data_zoomed.png)
+![8_features_data_zoomed](../master/static/8_data_zoomed.png)
 
 It looks better, additionally if we consider that angry, sad and affraid emotions as "dissatisfied" we could achive better accuracy on that emotion.
 
