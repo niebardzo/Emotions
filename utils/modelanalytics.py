@@ -103,18 +103,18 @@ class Analytics(Model):
 		visualizer.poof()
 
 
-	def draw_validation_curve(self, param_name, param_range, cv, logx=False, scoring="f1_weighted", n_jobs=5):
+	def draw_validation_curve(self, param_name, param_range, cv, logx=False, scoring="accuracy", n_jobs=5):
 		visualizer = ValidationCurve(self.model, param_name=param_name, param_range=param_range,
     					logx=logx, cv=cv, scoring=scoring, n_jobs=n_jobs)
-		visualizer.fit(self.training_data, self.test_data)
+		visualizer.fit(self.training_data, self.training_labels)
 		visualizer.poof()
 
-	def draw_learning_curve(self, cv, scoring='f1_weighted', n_job=5):
+	def draw_learning_curve(self, cv, scoring='accuracy', n_jobs=5):
 		visualizer = LearningCurve(self.model, cv=cv,scoring=scoring, n_jobs=n_jobs)
-		visualizer.fit(self.training_data, self.test_data)
+		visualizer.fit(self.training_data, self.training_labels)
 		visualizer.poof()
 
-	def draw_cross_validation_scores(self, cv, scoring='f1_weighted'):
+	def draw_cross_validation_scores(self, cv, scoring='accuracy'):
 		visualizer = CVScores(model=self.model, cv=cv, scoring=scoring)
 		visualizer.fit(self.training_data, self.training_labels)
 		visualizer.poof()
@@ -147,20 +147,19 @@ class EstimatorSelectionHelper(Model):
 
 	def __init__(self, model, params, data=None, labels=None):
 		super().__init__(model, np.array(data), np.array(labels))
-		#if not set(self.models.keys()).issubset(set(params.keys())):
-		#	missing_params = list(set(self.models.keys()) - set(params.keys()))
-		#	raise ValueError("Some estimators are missing parameters: %s" % missing_params)
+		if not set(self.models.keys()).issubset(set(params.keys())):
+			missing_params = list(set(self.models.keys()) - set(params.keys()))
+			raise ValueError("Some estimators are missing parameters: %s" % missing_params)
 		self.params = params
-		self.keys = ["knn", "naive_bayes","svm"]
-		#self.keys = models.keys()
+		self.keys = self.models.keys()
 		self.grid_searches = {}
 
 	def fit(self, cv=3, n_jobs=3, verbose=1, scoring=None, refit=False):
 		for key in self.keys:
 			print("Running GridSearchCV for %s." % key)
-			model = self.models[key]
+			self.model = self.models[key]
 			params = self.params[key]
-			gs = GridSearchCV(model, params, cv=cv, n_jobs=n_jobs,
+			gs = GridSearchCV(self.model, params, cv=cv, n_jobs=n_jobs,
 								verbose=verbose, scoring=scoring, refit=refit,
 								return_train_score=True, iid=False)
 			gs.fit(self.training_data,self.training_labels)
@@ -194,5 +193,7 @@ class EstimatorSelectionHelper(Model):
 
 		columns = ['estimator', 'min_score', 'mean_score', 'max_score', 'std_score']
 		columns = columns + [c for c in df.columns if c not in columns]
-
+		f= open("results.csv","w",newline="")
+		df[columns].to_csv(f)
+		f.close()
 		return df[columns]

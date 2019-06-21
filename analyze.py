@@ -24,7 +24,7 @@ ap.add_argument("-d", "--dataset", type=str, default="databases/KDEF/", help="Pa
 ap.add_argument("-m", "--model", type=str, default="knn", help="Name of the ML model to be used.")
 ap.add_argument("-s", "--serialized", type=str, help="Path to the file with serialized model.")
 ap.add_argument("-i", "--image", type=str, help="Path to the image file to analyze")
-ap.add_argument("-a", "--action", type=str,choices=["ts", "tt", "si", "d"], required=True, help="What action to pefrom (ts - train and serialize, tt - train and test,"+
+ap.add_argument("-a", "--action", type=str,choices=["ts","tsv", "tt", "si", "d"], required=True, help="What action to pefrom (ts - train and serialize, tt - train and test,"+
 	" si - use serialized to anaylze the image, d - save test and train dataset in HDF5.")
 ap.add_argument("-p", "--shape-predictor", required=True,
 	help="path to facial landmark predictor", default="models/shape.dat")
@@ -53,12 +53,14 @@ def change_label(label):
 if args["action"][:1] == "t":
 	data = load('databases/data.joblib')
 	labels = load('databases/labels.joblib')
-	if args["action"] == "ts":
+	if args["action"][:2] == "ts":
 		if args["model"] == "":
 			print("[ERROR] NO MODEL PROVIDED.")
 			exit()
 
 		model = Model(args["model"], data=data, labels=labels)
+		if args["action"] == "tsv":
+			model.use_voting_classifier()
 		model.split_dataset(0.01)
 
 		print("[INFO] Training the Model...")
@@ -72,6 +74,7 @@ if args["action"][:1] == "t":
 		#analytics = Analytics("naive_bayes", data=data, labels=labels)
 		#analytics.feature_selection("select_k_best", "f_classif", 8)
 		#analytics.draw_cross_validation_scores(cv=StratifiedKFold(5))
+		
 		ms = [
 			"knn",
 			"naive_bayes",
@@ -80,37 +83,90 @@ if args["action"][:1] == "t":
 			"random_forest",
 			"extra_tree",
 			"gradient_boost",
-			"ada_boost",
 			"mlp"
 		]
+
+		
+		def print_validation_curve(data,labels):
+			analytics = Analytics("knn", data=data, labels=labels)
+			analytics.feature_selection("select_k_best", "f_classif", 8)
+			analytics.draw_validation_curve(param_name="n_neighbors", param_range=np.arange(2,20,2), cv=StratifiedKFold(5))
+
+			analytics = Analytics("svm", data=data, labels=labels)
+			analytics.feature_selection("select_k_best", "f_classif", 8)
+			analytics.draw_validation_curve(param_name="C", param_range=np.arange(0.1,50,2), cv=StratifiedKFold(5))
+
+
+			analytics = Analytics("decision_tree", data=data, labels=labels)
+			analytics.feature_selection("select_k_best", "f_classif", 8)
+			analytics.draw_validation_curve(param_name="max_depth", param_range=np.arange(20,300,10), cv=StratifiedKFold(5))
+
+
+			analytics = Analytics("random_forest", data=data, labels=labels)
+			analytics.feature_selection("select_k_best", "f_classif", 8)
+			analytics.draw_validation_curve(param_name="n_estimators", param_range=np.arange(20, 200,10), cv=StratifiedKFold(5))
+
+			analytics = Analytics("extra_tree", data=data, labels=labels)
+			analytics.feature_selection("select_k_best", "f_classif", 8)
+			analytics.draw_validation_curve(param_name="n_estimators", param_range=np.arange(20, 200,10), cv=StratifiedKFold(5))
+
+			analytics = Analytics("gradient_boost", data=data, labels=labels)
+			analytics.feature_selection("select_k_best", "f_classif", 8)
+			analytics.draw_validation_curve(param_name="n_estimators", param_range=np.arange(5,60,2), cv=StratifiedKFold(5))
+			analytics.draw_validation_curve(param_name="learning_rate", param_range=np.arange(0.03,0.2,0.01), cv=StratifiedKFold(5))
+
+			analytics = Analytics("mlp", data=data, labels=labels)
+			analytics.feature_selection("select_k_best", "f_classif", 8)
+			analytics.draw_validation_curve(param_name="hidden_layer_sizes", param_range=np.array([i for i in range(6,20,1)]), cv=StratifiedKFold(5))
+
+
+		#print_validation_curve(data,labels)
+
 		#for m in ms:
 		#	analytics = Analytics(m, data=data, labels=labels)
 		#	analytics.feature_selection("select_k_best", "f_classif", 8)
-		#	print(m)
-		#	#analytics.print_cross_val_score(cv=StratifiedKFold(5))
+		##	analytics.print_cross_val_score(cv=StratifiedKFold(5))
+		#	analytics.draw_learning_curve(cv=StratifiedKFold(5))
 		#	analytics.draw_cross_validation_scores(cv=StratifiedKFold(5))
-		
+
+
+
 		params = {
 		"knn": {"n_neighbors": np.arange(1,20,1), "weights": ["uniform", "distance"],
 		"algorithm" : ["auto", "ball_tree", "kd_tree", "brute"]},
 		"naive_bayes": {},
-		"svm": {"kernel":["linear", "rbf"], "C": np.arange(0.5,50,0.5),
-		"gamma": np.arange(0.5,10,0.5)}
-
+		"svm": {"kernel":["linear", "rbf"], "C": np.arange(0.1,50,0.5),
+		"gamma": ['auto', 'scale']},
+		"decision_tree": {"criterion": ["gini", "entropy"], "splitter": ["best", "random"], "max_depth": np.arange(5,300,1)},
+		"random_forest": {"n_estimators": np.arange(20,300,3),"criterion": ["gini", "entropy"]},
+		"extra_tree": {"n_estimators": np.arange(20,300,3),"criterion": ["gini", "entropy"]},
+		"gradient_boost": {"n_estimators": np.arange(5,60,2), "learning_rate": np.arange(0.03,0.2,0.01)},
+		"mlp": [{"hidden_layer_sizes": [ (i, ) for i in np.arange(6,20,1)], "alpha": np.arange(5e-06,5e-05,5e-06), "solver": ["lbfgs"]},
+		{"hidden_layer_sizes": [ (i, j, ) for i in np.arange(4,18,1) for j in np.arange(8,20,1)],"alpha": np.arange(5e-06,5e-05,5e-06), "solver": ["lbfgs"]}
+		]
 		}
 
-		selection = EstimatorSelectionHelper("knn", params, data=data, labels=labels)
-		selection.fit(scoring="f1_weighted", n_jobs=10)
-		print(selection.score_summary(sort_by='max_score'))
+		#selection = EstimatorSelectionHelper("knn", params, data=data, labels=labels)
+		#selection.fit(scoring="accuracy", n_jobs=12, cv=5)
+		#print(selection.score_summary(sort_by='max_score'))
 
 
 
 		model = Model("naive_bayes", data=data, labels=labels)
+		model.use_voting_classifier()
 		model.split_dataset(0.30)
 		model.univariate_feature_selection("select_k_best", "mutual_info_classif", 8)
 		model.train()
-		print("[INFO] testing model: {}".format("naive_bayes"))
+		print("[INFO] testing model: {}".format("voting"))
 		print(model.test())
+
+
+		analytics = Analytics("knn", data=data, labels=labels)
+		analytics.use_voting_classifier()
+		analytics.feature_selection("select_k_best", "f_classif", 8)
+		analytics.print_cross_val_score(cv=StratifiedKFold(5))
+		analytics.draw_learning_curve(cv=StratifiedKFold(5))
+		analytics.draw_cross_validation_scores(cv=StratifiedKFold(5))
 
 
 elif args["action"] == "si":

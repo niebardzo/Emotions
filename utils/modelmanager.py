@@ -3,7 +3,7 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
-from sklearn.ensemble import VotingClassifier, GradientBoostingClassifier, AdaBoostClassifier
+from sklearn.ensemble import VotingClassifier, GradientBoostingClassifier
 
 from sklearn.neural_network import MLPClassifier
 
@@ -44,15 +44,14 @@ class Model(object):
 
 
 		self.models = {
-			"knn": KNeighborsClassifier(),
+			"knn": KNeighborsClassifier(n_neighbors=3, algorithm="ball_tree", weights="distance"),
 			"naive_bayes": GaussianNB(),
-			"svm": SVC(),
-			"decision_tree": DecisionTreeClassifier(),
-			"random_forest": RandomForestClassifier(),
-			"extra_tree": ExtraTreesClassifier(),
-			"gradient_boost": GradientBoostingClassifier(),
-			"ada_boost": AdaBoostClassifier(),
-			"mlp":  MLPClassifier()
+			"svm": SVC(C=10, gamma="scale", kernel="rbf"),
+			"decision_tree": DecisionTreeClassifier(criterion="gini", max_depth=246, splitter="random"),
+			"random_forest": RandomForestClassifier(n_estimators=158, criterion="gini"),
+			"extra_tree": ExtraTreesClassifier(n_estimators=41, criterion="entropy"),
+			"gradient_boost": GradientBoostingClassifier(n_estimators=23, learning_rate=0.11),
+			"mlp":  MLPClassifier(solver="lbfgs", hidden_layer_sizes=(16,), alpha=1.5E-05)
 
 		}
 
@@ -65,8 +64,8 @@ class Model(object):
 		self.feature_mask = [True,True,True,True,True,True,True,True,True,True,True,True,True]
 
 
-	def use_voting_classifier(dict):
-		pass
+	def use_voting_classifier(self):
+		self.model = VotingClassifier(estimators=[('nb', self.models["naive_bayes"]), ('et', self.models["extra_tree"]), ('mlp', self.models["mlp"])], voting='soft', weights=[1.5,3,2.5])
 
 	def split_dataset(self, test_size=0.20):
 		"""Method for spliting dataset to the training and test."""
