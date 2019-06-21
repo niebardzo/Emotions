@@ -160,7 +160,9 @@ For the purpose of better accuracy and f1 score, finally the voting classifer ha
 
 Below there is Cross Validation and Learning Curve for Voting Classifier.
 
-IMAGES
+![CV_Voting](../master/static/Cross_V_Voting.png)
+
+![LC_Voting](../master/static/Learning_Curve_Voting.png)
 
 ### Results
 
