@@ -63,7 +63,7 @@ TBF
 
 The chapter presents the solution overview. Each chapter describes the method and/or workflow how each step was implemented. Please see the diagrams describing the overall emotion detection procedure and the diagram describing the workflow of training the model.
 
-IMAGE
+![ARCH_DIAGRAM](../master/static/arch_diagram.png)
 
 ### Features Extraction
 
