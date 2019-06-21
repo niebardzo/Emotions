@@ -109,7 +109,7 @@ It looks better, additionally if we consider that angry, sad and affraid emotion
 Saying that always 8 features will be selected out of 13 initial features. The selection is done in the pipeline.
 
 
-### Model Selection and Evaluation
+### Model Selection
 
 TBF
 
@@ -118,7 +118,9 @@ TBF
 
 TBF
 
+### Results
 
+TBF
 
 ## Contact
 
