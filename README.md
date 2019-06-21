@@ -153,29 +153,33 @@ The results are in the file under **static/results.csv**.
 
 Below you could find the few visualization.
 
-Learning curves for (Naive Bayes, Extra Tree and MLP):
+Learning curves for (Knn, Extra Tree, MLP and Gradient Boosting):
 
 
-![LC_NB](../master/static/Learning_Curve_NB.png)
+![LC_NB](../master/static/Learning_Curve_KNN.png)
 
 ![LC_ET](../master/static/Learning_Curve_ET.png)
 
 ![LC_MLP](../master/static/Learning_Curve_MLP.png)
 
+![LC_GB](../master/static/Learning_Curve_GB.png)
 
-Cross Validation charts for (Naive Bayes, Extra Tree and MLP):
 
-![CV_NB](../master/static/Cross_V_NB.png)
+Cross Validation charts for (Knn, Extra Tree, MLP and Gradient Boosting):
+
+![CV_NB](../master/static/Cross_V_KNN.png)
 
 ![CV_ET](../master/static/Cross_V_ET.png)
 
 ![CV_MLP](../master/static/Cross_V_MLP.png)
 
+![CV_MLP](../master/static/Cross_V_GB.png)
 
 Some hyper parameters tuning visualization.
+
 ![VC_MLP](../master/static/Validation_Curve_MLP.png)
 
-![VC_ET](../master/static/Validation_Curve_ET.png)
+![VC_ET](../master/static/Validation_Curve_KNN.png)
 
 ![VC_SVC](../master/static/Validation_Curve_SVC.png)
 
@@ -186,7 +190,8 @@ For the purpose of better accuracy and f1 score, finally the voting classifer ha
 
 ```
 	def use_voting_classifier(self):
-		self.model = VotingClassifier(estimators=[('nb', self.models["naive_bayes"]), ('et', self.models["extra_tree"]), ('mlp', self.models["mlp"])], voting='soft', weights=[1.5,3,2.5])
+		"""Method for changing to VotingClassifier."""
+		self.model = VotingClassifier(estimators=[('knn', self.models["knn"]), ('et', self.models["extra_tree"]), ('gb', self.models["gradient_boost"])], voting='hard', weights=[1.6,1,1.2])
 ```
 
 Below there is Cross Validation and Learning Curve for Voting Classifier.
