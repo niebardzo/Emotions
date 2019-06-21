@@ -109,14 +109,11 @@ It looks better, additionally if we consider that angry, sad and affraid emotion
 Saying that always 8 features will be selected out of 13 initial features. The selection is done in the pipeline.
 
 
-### Model Selection
+### Model Selection & Hyperparameter Tunning
 
 TBF
 
 
-### Hyperparameter Tunning
-
-TBF
 
 ### Results
 
@@ -126,9 +123,13 @@ TBF
 
 If you would like to ask me a question, please contact me: niebardzo@gmail.com.
 
+## Kudos
+
+Kudos to Adrian Rosebrock from [Pyimagesearch.com](https://www.pyimagesearch.com) for showing the simple and effective way of extracting the face landmark and for great tutorials that he does.
+
 ## To Do
 
 - [ ] Write a docsting for each class and each method in utils.
 - [x] Implement Feature Selection, implement checking feature importance with plotting.
-- [ ] Implement good model choosing with metrics and plotting - analyze.py -a tt
+- [x] Implement good model choosing with metrics and plotting - analyze.py -a tt
 - [ ] Finish README - record a demo, add drawings and diagrams.

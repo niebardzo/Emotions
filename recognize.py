@@ -53,7 +53,7 @@ while True:
 		prediction = model.predict([face.extract_features()])
 		buff.insert(0 ,prediction[0])
 
-		if len(buff) >= 10:
+		if len(buff) >= 5:
 			buff.pop()
 			prediction = [most_common(buff)]
 
