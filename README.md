@@ -67,10 +67,14 @@ TBF
 
 ### Features Extraction
 
-To properly analyze the image, the face features have to be extracted. The class Face have been implemented to extract the face features. There are 4 features extracted for each eye region and 5 features extracted for mouth region which gives 13 features in total. The features are normalized with the normalizer caluculated based on the sum of the eucilidean distance between face gravity center point and center of each eye divide by 2.0.
+To properly analyze the image, the face features have to be extracted. The class Face have been implemented to extract the face features. There are 4 features extracted for each eye region and 5 features extracted for mouth region which gives 13 features in total.
 
 IMAGE
 
+The features are normalized with the normalizer caluculated based on the sum of the eucilidean distance between face gravity center point and center of each eye divide by 2.0.
+
+
+IMAGE
 
 ### Feature Engineering
 
@@ -147,9 +151,36 @@ params = {
 
 The results are in the file under **static/results.csv**.
 
-Below you could find the few visualization:
+Below you could find the few visualization.
 
-IMAGES
+Learning curves for (Naive Bayes, Extra Tree and MLP):
+
+
+![LC_NB](../master/static/Learning_Curve_NB.png)
+
+![LC_ET](../master/static/Learning_Curve_ET.png)
+
+![LC_MLP](../master/static/Learning_Curve_MLP.png)
+
+
+Cross Validation charts for (Naive Bayes, Extra Tree and MLP):
+
+![LC_NB](../master/static/Cross_V_NB.png)
+
+![LC_ET](../master/static/Cross_V_ET.png)
+
+![LC_MLP](../master/static/Cross_v_MLP.png)
+
+
+Some hyper parameters tuning visualization.
+![VC_MLP](../master/static/Validation_Curve_MLP.png)
+
+![VC_ET](../master/static/Validation_Curve_ET.png)
+
+![VC_SVC](../master/static/Validation_Curve_SVC.png)
+
+
+Not all results have been presented, but all charts can be found in **static** folder in this repo.
 
 For the purpose of better accuracy and f1 score, finally the voting classifer have been used with the following partial classifiers and weights:
 
@@ -163,6 +194,8 @@ Below there is Cross Validation and Learning Curve for Voting Classifier.
 ![CV_Voting](../master/static/Cross_V_Voting.png)
 
 ![LC_Voting](../master/static/Learning_Curve_Voting.png)
+
+The learning curve of the voting classifier is pretty far from the training score curve, which means there can be easly more training data applied to the model.
 
 ### Results
 
