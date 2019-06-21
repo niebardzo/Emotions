@@ -65,6 +65,7 @@ class Model(object):
 
 
 	def use_voting_classifier(self):
+		"""Method for changing to VotingClassifier."""
 		self.model = VotingClassifier(estimators=[('nb', self.models["naive_bayes"]), ('et', self.models["extra_tree"]), ('mlp', self.models["mlp"])], voting='soft', weights=[1.5,3,2.5])
 
 	def split_dataset(self, test_size=0.20):
@@ -84,7 +85,7 @@ class Model(object):
 		return self.model.predict(to_predict)
 
 	def univariate_feature_selection(self, method, scoring, number):
-		
+		"""Method that creates the pipeline for only important feature extraction with univariate_feature_selection."""
 		self.scoring_functions = {
 			"f_classif": f_classif,
 			"mutual_info_classif": mutual_info_classif,
@@ -105,6 +106,7 @@ class Model(object):
 
 
 	def recursive_feature_elimination(self):
+		"""Method that creates the pipeline for only important feature extraction with RFE method."""
 		svc = SVC(kernel="linear")
 		self.model = Pipeline([
 			('feature_selection', RFE(estimator=svc, n_features_to_select=8, step=10)),
@@ -112,6 +114,7 @@ class Model(object):
 			])
 
 	def get_feature_labels(self):
+		"""Method for retriving feature lables from the model."""
 		feature_labels = []
 		for feature, i in zip(self.feature_names,self.feature_mask):
 			if i == True:
