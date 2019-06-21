@@ -63,7 +63,7 @@ TBF
 
 The chapter presents the solution overview. Each chapter describes the method and/or workflow how each step was implemented. Please see the diagrams describing the overall emotion detection procedure and the diagram describing the workflow of training the model.
 
-TBF
+IMAGE
 
 ### Features Extraction
 
@@ -165,11 +165,11 @@ Learning curves for (Naive Bayes, Extra Tree and MLP):
 
 Cross Validation charts for (Naive Bayes, Extra Tree and MLP):
 
-![LC_NB](../master/static/Cross_V_NB.png)
+![CV_NB](../master/static/Cross_V_NB.png)
 
-![LC_ET](../master/static/Cross_V_ET.png)
+![CV_ET](../master/static/Cross_V_ET.png)
 
-![LC_MLP](../master/static/Cross_v_MLP.png)
+![CV_MLP](../master/static/Cross_V_MLP.png)
 
 
 Some hyper parameters tuning visualization.
@@ -221,7 +221,7 @@ Kudos to Adrian Rosebrock from [Pyimagesearch.com](https://www.pyimagesearch.com
 
 ## To Do
 
-- [ ] Write a docsting for each class and each method in utils.
+- [x] Write a docsting for each class and each method in utils.
 - [x] Implement Feature Selection, implement checking feature importance with plotting.
 - [x] Implement good model choosing with metrics and plotting - analyze.py -a tt
 - [ ] Finish README - record a demo, add drawings and diagrams.

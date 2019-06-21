@@ -120,14 +120,14 @@ if args["action"][:1] == "t":
 			analytics.draw_validation_curve(param_name="hidden_layer_sizes", param_range=np.array([i for i in range(6,20,1)]), cv=StratifiedKFold(5))
 
 
-		print_validation_curve(data,labels)
+		#print_validation_curve(data,labels)
 
-		for m in ms:
-			analytics = Analytics(m, data=data, labels=labels)
-			analytics.feature_selection("select_k_best", "f_classif", 8)
-		#	analytics.print_cross_val_score(cv=StratifiedKFold(5))
-			analytics.draw_learning_curve(cv=StratifiedKFold(5))
-			analytics.draw_cross_validation_scores(cv=StratifiedKFold(5))
+		#for m in ms:
+		#	analytics = Analytics(m, data=data, labels=labels)
+		#	analytics.feature_selection("select_k_best", "f_classif", 8)
+		##	analytics.print_cross_val_score(cv=StratifiedKFold(5))
+		#	analytics.draw_learning_curve(cv=StratifiedKFold(5))
+		#	analytics.draw_cross_validation_scores(cv=StratifiedKFold(5))
 
 
 
@@ -154,7 +154,7 @@ if args["action"][:1] == "t":
 
 		model = Model("naive_bayes", data=data, labels=labels)
 		model.use_voting_classifier()
-		model.split_dataset(0.30)
+		model.split_dataset()
 		model.univariate_feature_selection("select_k_best", "mutual_info_classif", 8)
 		model.train()
 		print("[INFO] testing model: {}".format("voting"))

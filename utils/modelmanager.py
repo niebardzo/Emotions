@@ -44,14 +44,14 @@ class Model(object):
 
 
 		self.models = {
-			"knn": KNeighborsClassifier(n_neighbors=3, algorithm="ball_tree", weights="distance"),
+			"knn": KNeighborsClassifier(n_neighbors=9, algorithm="brute", weights="distance"),
 			"naive_bayes": GaussianNB(),
-			"svm": SVC(C=10, gamma="scale", kernel="rbf"),
-			"decision_tree": DecisionTreeClassifier(criterion="gini", max_depth=246, splitter="random"),
-			"random_forest": RandomForestClassifier(n_estimators=158, criterion="gini"),
-			"extra_tree": ExtraTreesClassifier(n_estimators=41, criterion="entropy"),
-			"gradient_boost": GradientBoostingClassifier(n_estimators=23, learning_rate=0.11),
-			"mlp":  MLPClassifier(solver="lbfgs", hidden_layer_sizes=(16,), alpha=1.5E-05)
+			"svm": SVC(C=15.6, gamma="scale", kernel="rbf"),
+			"decision_tree": DecisionTreeClassifier(criterion="entropy", max_depth=55, splitter="best"),
+			"random_forest": RandomForestClassifier(n_estimators=104, criterion="gini"),
+			"extra_tree": ExtraTreesClassifier(n_estimators=122, criterion="entropy"),
+			"gradient_boost": GradientBoostingClassifier(n_estimators=33, learning_rate=0.14),
+			"mlp":  MLPClassifier(solver="lbfgs", hidden_layer_sizes=(16,), alpha=5E-06)
 
 		}
 
@@ -66,7 +66,7 @@ class Model(object):
 
 	def use_voting_classifier(self):
 		"""Method for changing to VotingClassifier."""
-		self.model = VotingClassifier(estimators=[('nb', self.models["naive_bayes"]), ('et', self.models["extra_tree"]), ('mlp', self.models["mlp"])], voting='soft', weights=[1.5,3,2.5])
+		self.model = VotingClassifier(estimators=[('knn', self.models["knn"]), ('et', self.models["extra_tree"]), ('gb', self.models["gradient_boost"])], voting='hard', weights=[1.6,1,1.2])
 
 	def split_dataset(self, test_size=0.20):
 		"""Method for spliting dataset to the training and test."""
