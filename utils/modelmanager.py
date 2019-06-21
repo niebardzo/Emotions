@@ -1,5 +1,3 @@
-from joblib import dump, load
-
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
@@ -48,13 +46,13 @@ class Model(object):
 		self.models = {
 			"knn": KNeighborsClassifier(),
 			"naive_bayes": GaussianNB(),
-			"svm": SVC(gamma='auto'),
+			"svm": SVC(),
 			"decision_tree": DecisionTreeClassifier(),
-			"random_forest": RandomForestClassifier(n_estimators=20),
-			"extra_tree": ExtraTreesClassifier(n_estimators=20),
+			"random_forest": RandomForestClassifier(),
+			"extra_tree": ExtraTreesClassifier(),
 			"gradient_boost": GradientBoostingClassifier(),
 			"ada_boost": AdaBoostClassifier(),
-			"mlp":  MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(20,), random_state=1)
+			"mlp":  MLPClassifier()
 
 		}
 

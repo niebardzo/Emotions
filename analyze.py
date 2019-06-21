@@ -10,7 +10,7 @@ from imutils import face_utils
 from utils.imageprocessing import Image
 from utils.imageprocessing import Face
 from utils.modelmanager import Model
-from utils.modelanalytics import Analytics
+from utils.modelanalytics import Analytics, EstimatorSelectionHelper
 from joblib import dump, load
 
 from sklearn.model_selection import StratifiedKFold
@@ -79,16 +79,31 @@ if args["action"][:1] == "t":
 			"decision_tree",
 			"random_forest",
 			"extra_tree",
+			"gradient_boost",
+			"ada_boost",
 			"mlp"
 		]
-		for m in ms:
-			analytics = Analytics(m, data=data, labels=labels)
-			analytics.feature_selection("select_k_best", "f_classif", 8)
-			print(m)
-			#analytics.print_cross_val_score(cv=StratifiedKFold(5))
-			analytics.draw_cross_validation_scores(cv=StratifiedKFold(5))
-		#analytics.split_dataset(0.30)
+		#for m in ms:
+		#	analytics = Analytics(m, data=data, labels=labels)
+		#	analytics.feature_selection("select_k_best", "f_classif", 8)
+		#	print(m)
+		#	#analytics.print_cross_val_score(cv=StratifiedKFold(5))
+		#	analytics.draw_cross_validation_scores(cv=StratifiedKFold(5))
 		
+		params = {
+		"knn": {"n_neighbors": np.arange(1,20,1), "weights": ["uniform", "distance"],
+		"algorithm" : ["auto", "ball_tree", "kd_tree", "brute"]},
+		"naive_bayes": {},
+		"svm": {"kernel":["linear", "rbf"], "C": np.arange(0.5,50,0.5),
+		"gamma": np.arange(0.5,10,0.5)}
+
+		}
+
+		selection = EstimatorSelectionHelper("knn", params, data=data, labels=labels)
+		selection.fit(scoring="f1_weighted", n_jobs=10)
+		print(selection.score_summary(sort_by='max_score'))
+
+
 
 		model = Model("naive_bayes", data=data, labels=labels)
 		model.split_dataset(0.30)
