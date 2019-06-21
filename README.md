@@ -57,7 +57,7 @@ python analyze.py --help
 
 Please see below the demo of final emotion prediction.
 
-TBF
+!TBF!
 
 ## Solution Overview
 
@@ -68,13 +68,20 @@ The chapter presents the solution overview. Each chapter describes the method an
 ### Features Extraction
 
 To properly analyze the image, the face features have to be extracted. The class Face have been implemented to extract the face features. There are 4 features extracted for each eye region and 5 features extracted for mouth region which gives 13 features in total.
+The features have the following labels:
 
-IMAGE
+```
+self.feature_names = ['EARL','L1','L2','L3', 'EARR', 'R1', 'R2', 'R3', 'MAR', 'M1', 'M2', 'M3', 'M4']
+```
+
+
+!IMAGE!
 
 The features are normalized with the normalizer caluculated based on the sum of the eucilidean distance between face gravity center point and center of each eye divide by 2.0.
 
 
-IMAGE
+!IMAGE!
+
 
 ### Feature Engineering
 
@@ -165,7 +172,7 @@ Learning curves for (Knn, Extra Tree, MLP and Gradient Boosting):
 ![LC_GB](../master/static/Learning_Curve_GB.png)
 
 
-Cross Validation charts for (Knn, Extra Tree, MLP and Gradient Boosting):
+Cross Validation charts for (Knn, Extra Tree, MLP and Gradient Boosting), the score in cross validation is **accuracy**:
 
 ![CV_NB](../master/static/Cross_V_KNN.png)
 
@@ -194,7 +201,7 @@ For the purpose of better accuracy and f1 score, finally the voting classifer ha
 		self.model = VotingClassifier(estimators=[('knn', self.models["knn"]), ('et', self.models["extra_tree"]), ('gb', self.models["gradient_boost"])], voting='hard', weights=[1.6,1,1.2])
 ```
 
-Below there is Cross Validation and Learning Curve for Voting Classifier.
+Below there is Cross Validation(score **accuracy**) and Learning Curve for Voting Classifier.
 
 ![CV_Voting](../master/static/Cross_V_Voting.png)
 
