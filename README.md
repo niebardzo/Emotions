@@ -111,17 +111,74 @@ Saying that always 8 features will be selected out of 13 initial features. The s
 
 ### Model Selection & Hyperparameter Tunning
 
-TBF
+Most of the models avaiable in SKLearn Library for classifiation have been tested. Detailed list can be found below:
+```
+ms = [
+			"knn",
+			"naive_bayes",
+			"svm",
+			"decision_tree",
+			"random_forest",
+			"extra_tree",
+			"gradient_boost",
+			"mlp"
+		]
+```
 
+For each classification, the most significat hyper parameter have been tunned using **GridSearchCV()** class from SKLearn library. To make it easier the separate class have been made which inherits from Model class and tune hyper parameters for every class in Model.classes, with the input of parameters.
 
+```
+params = {
+		"knn": {"n_neighbors": np.arange(1,20,1), "weights": ["uniform", "distance"],
+		"algorithm" : ["auto", "ball_tree", "kd_tree", "brute"]},
+		"naive_bayes": {},
+		"svm": {"kernel":["linear", "rbf"], "C": np.arange(0.1,50,0.5),
+		"gamma": ['auto', 'scale']},
+		"decision_tree": {"criterion": ["gini", "entropy"], "splitter": ["best", "random"], "max_depth": np.arange(5,300,1)},
+		"random_forest": {"n_estimators": np.arange(20,300,3),"criterion": ["gini", "entropy"]},
+		"extra_tree": {"n_estimators": np.arange(20,300,3),"criterion": ["gini", "entropy"]},
+		"gradient_boost": {"n_estimators": np.arange(5,60,2), "learning_rate": np.arange(0.03,0.2,0.01)},
+		"mlp": [{"hidden_layer_sizes": [ (i, ) for i in np.arange(6,20,1)], "alpha": np.arange(5e-06,5e-05,5e-06), "solver": ["lbfgs"]},
+		{"hidden_layer_sizes": [ (i, j, ) for i in np.arange(4,18,1) for j in np.arange(8,20,1)],"alpha": np.arange(5e-06,5e-05,5e-06), "solver": ["lbfgs"]}
+		]
+		}
+
+```
+
+The results are in the file under **static/results.csv**.
+
+Below you could find the few visualization:
+
+IMAGES
+
+For the purpose of better accuracy and f1 score, finally the voting classifer have been used with the following partial classifiers and weights:
+
+```
+	def use_voting_classifier(self):
+		self.model = VotingClassifier(estimators=[('nb', self.models["naive_bayes"]), ('et', self.models["extra_tree"]), ('mlp', self.models["mlp"])], voting='soft', weights=[1.5,3,2.5])
+```
+
+Below there is Cross Validation and Learning Curve for Voting Classifier.
+
+IMAGES
 
 ### Results
 
-TBF
+In this chatper there are results of clasification with Voting Classifier defined previously. The data have been splitted in to 20% of test data and 80% of training data. Below you can see the data distribution (previously the data was distributed equally through all classes):
+
+![Class_balance](../master/static/Class_balance_after_splitting.png)
+
+Classification report below show the final results of the classification.
+
+![Voting_Classification_report](../master/static/Voting_Classification_report.png)
+
+and the prediction error chart for each class.
+
+![Voting_pred_error](../master/static/Voting_class_prediction_error.png)
 
 ## Contact
 
-If you would like to ask me a question, please contact me: niebardzo@gmail.com.
+If you would like to ask me a question, please contact me: pat049b@gmail.com.
 
 ## Kudos
 
