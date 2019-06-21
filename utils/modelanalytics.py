@@ -31,6 +31,10 @@ set_palette('paired')
 
 
 class Analytics(Model):
+	"""
+	Class that inherits from Model class to draw the analytics of the model.
+	Each drawing method is not described with the docstring, only those that do not draw.
+	"""
 
 	def __init__(self, model, data=None, labels=None):
 		super().__init__(model, np.array(data), np.array(labels))
@@ -120,7 +124,7 @@ class Analytics(Model):
 		visualizer.poof()
 
 	def feature_selection(self, method, scoring, number):
-		
+		"""Method to apply the feature selection, to modify the data but not in the pipeline."""
 		self.scoring_functions = {
 			"f_classif": f_classif,
 			"mutual_info_classif": mutual_info_classif,
@@ -143,9 +147,13 @@ class Analytics(Model):
 
 
 
-class EstimatorSelectionHelper(Model):
+class EstimatorSelectionHelper(Analytics):
+	"""
+	Helper class that inherits from Analytics. The class is implemeted to help tune the hyperparameters.
 
+	"""
 	def __init__(self, model, params, data=None, labels=None):
+		"""Constructor of the class, the constructor class the inheritated constructor."""
 		super().__init__(model, np.array(data), np.array(labels))
 		if not set(self.models.keys()).issubset(set(params.keys())):
 			missing_params = list(set(self.models.keys()) - set(params.keys()))
@@ -153,8 +161,10 @@ class EstimatorSelectionHelper(Model):
 		self.params = params
 		self.keys = self.models.keys()
 		self.grid_searches = {}
+		self.feature_selection("select_k_best", "f_classif", 8)
 
 	def fit(self, cv=3, n_jobs=3, verbose=1, scoring=None, refit=False):
+		"""Method to fit the GridSearchCV with every classifier from the Model class."""
 		for key in self.keys:
 			print("Running GridSearchCV for %s." % key)
 			self.model = self.models[key]
@@ -166,6 +176,7 @@ class EstimatorSelectionHelper(Model):
 			self.grid_searches[key] = gs
 
 	def score_summary(self, sort_by='mean_score'):
+		"""Method for printingg the score summary and saving to the file results.csv"""
 		def row(key, scores, params):
 			d = {
 					'estimator': key,
