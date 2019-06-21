@@ -162,7 +162,7 @@ class Face(object):
 		"""Method returns the features of the face."""
 		self.get_eyes_features()
 		self.get_mouth_features()
-		return self.features
+		return np.array(self.features)
 		
 		
 

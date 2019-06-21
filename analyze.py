@@ -10,7 +10,12 @@ from imutils import face_utils
 from utils.imageprocessing import Image
 from utils.imageprocessing import Face
 from utils.modelmanager import Model
+from utils.modelanalytics import Analytics
 from joblib import dump, load
+
+from sklearn.model_selection import StratifiedKFold
+from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestClassifier
 
 
 ap = argparse.ArgumentParser()
@@ -63,21 +68,34 @@ if args["action"][:1] == "t":
 		print("[INFO] Model successfully serialized under models/emotion.joblib .")
 	
 	elif args["action"] == "tt":
-		model_names = [
-				"knn",
-				"naive_bayes",
-				"svm",
-				"decision_tree",
-				"random_forest",
-				"extra_tree"
-			]
 
-		for model_name in model_names:
-			model = Model(model_name, data=data, labels=labels)
-			model.split_dataset()
-			model.train()
-			print("[INFO] testing model: {}".format(model_name))
-			print(model.test())
+		#analytics = Analytics("naive_bayes", data=data, labels=labels)
+		#analytics.feature_selection("select_k_best", "f_classif", 8)
+		#analytics.draw_cross_validation_scores(cv=StratifiedKFold(5))
+		ms = [
+			"knn",
+			"naive_bayes",
+			"svm",
+			"decision_tree",
+			"random_forest",
+			"extra_tree",
+			"mlp"
+		]
+		for m in ms:
+			analytics = Analytics(m, data=data, labels=labels)
+			analytics.feature_selection("select_k_best", "f_classif", 8)
+			print(m)
+			#analytics.print_cross_val_score(cv=StratifiedKFold(5))
+			analytics.draw_cross_validation_scores(cv=StratifiedKFold(5))
+		#analytics.split_dataset(0.30)
+		
+
+		model = Model("naive_bayes", data=data, labels=labels)
+		model.split_dataset(0.30)
+		model.univariate_feature_selection("select_k_best", "mutual_info_classif", 8)
+		model.train()
+		print("[INFO] testing model: {}".format("naive_bayes"))
+		print(model.test())
 
 
 elif args["action"] == "si":

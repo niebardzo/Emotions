@@ -1,24 +1,21 @@
 from joblib import dump, load
+
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import GaussianNB
-from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
+from sklearn.ensemble import VotingClassifier, GradientBoostingClassifier, AdaBoostClassifier
+
+from sklearn.neural_network import MLPClassifier
+
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
-
 from sklearn.pipeline import Pipeline
-
 from sklearn.feature_selection import SelectKBest, SelectPercentile, SelectFpr
 from sklearn.feature_selection import chi2, f_classif, mutual_info_classif
-
-from sklearn.feature_selection import RFECV, RFE
-from sklearn.svm import SVR
-
-from sklearn.svm import LinearSVC
-from sklearn.feature_selection import SelectFromModel
+from sklearn.feature_selection import RFE
 
 
 
@@ -49,12 +46,16 @@ class Model(object):
 
 
 		self.models = {
-			"knn": KNeighborsClassifier(n_neighbors=4),
+			"knn": KNeighborsClassifier(),
 			"naive_bayes": GaussianNB(),
-			"svm": SVC(kernel="linear"),
+			"svm": SVC(gamma='auto'),
 			"decision_tree": DecisionTreeClassifier(),
 			"random_forest": RandomForestClassifier(n_estimators=20),
-			"extra_tree": ExtraTreesClassifier(n_estimators=20)
+			"extra_tree": ExtraTreesClassifier(n_estimators=20),
+			"gradient_boost": GradientBoostingClassifier(),
+			"ada_boost": AdaBoostClassifier(),
+			"mlp":  MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(20,), random_state=1)
+
 		}
 
 		self.le = LabelEncoder()
@@ -62,9 +63,12 @@ class Model(object):
 
 		self.training_data = data
 		self.training_labels = self.le.fit_transform(labels)
-		self.test_data = []
-		self.test_labels = []
+		self.feature_names = ['EARL','L1','L2','L3', 'EARR', 'R1', 'R2', 'R3', 'MAR', 'M1', 'M2', 'M3', 'M4']
+		self.feature_mask = [True,True,True,True,True,True,True,True,True,True,True,True,True]
 
+
+	def use_voting_classifier(dict):
+		pass
 
 	def split_dataset(self, test_size=0.20):
 		"""Method for spliting dataset to the training and test."""
@@ -82,16 +86,17 @@ class Model(object):
 		"""Method returns the prefiction for new data."""
 		return self.model.predict(to_predict)
 
-	def univariate_feature_selection(self, method, scoring):
+	def univariate_feature_selection(self, method, scoring, number):
 		
 		self.scoring_functions = {
 			"f_classif": f_classif,
-			"mutual_info_classif": mutual_info_classif
+			"mutual_info_classif": mutual_info_classif,
+			"chi2": chi2
 		}
 
 		self.selection_methods = {
-			"select_k_best": SelectKBest(self.scoring_functions[scoring], k=40),
-			"select_percentile": SelectPercentile(self.scoring_functions[scoring], percentile=10)
+			"select_k_best": SelectKBest(self.scoring_functions[scoring], k=number),
+			"select_percentile": SelectPercentile(self.scoring_functions[scoring], percentile=number)
 		}
 
 		
@@ -100,14 +105,19 @@ class Model(object):
 			('classification', self.model)
 			])
 
+
+
 	def recursive_feature_elimination(self):
 		svc = SVC(kernel="linear")
 		self.model = Pipeline([
-			('feature_selection', RFE(estimator=svc, n_features_to_select=30, step=50)),
+			('feature_selection', RFE(estimator=svc, n_features_to_select=8, step=10)),
 			('classification', self.model)
 			])
 
-
-	def select_from_model(self):
-		pass
-
+	def get_feature_labels(self):
+		feature_labels = []
+		for feature, i in zip(self.feature_names,self.feature_mask):
+			if i == True:
+				feature_labels.append(feature)
+		return feature_labels
+		

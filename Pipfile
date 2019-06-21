@@ -14,6 +14,8 @@ joblib = "*"
 tqdm = "*"
 opencv-contrib-python = "*"
 matplotlib = "*"
+pandas = "*"
+yellowbrick = "*"
 
 [dev-packages]
 
