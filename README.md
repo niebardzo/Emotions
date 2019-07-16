@@ -235,4 +235,4 @@ Kudos to Adrian Rosebrock from [Pyimagesearch.com](https://www.pyimagesearch.com
 - [x] Write a docsting for each class and each method in utils.
 - [x] Implement Feature Selection, implement checking feature importance with plotting.
 - [x] Implement good model choosing with metrics and plotting - analyze.py -a tt
-- [ ] Finish README - record a demo, add drawings and diagrams.
+- [x] Finish README - record a demo, add drawings and diagrams.
