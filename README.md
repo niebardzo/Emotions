@@ -14,6 +14,8 @@ Features extracted with the labels are numpy objects serialized in the folder **
 
 The software was tested on Ubuntu 18.04.* LTS with Python 3.6.* installed.
 
+
+
 All other requirements are specified in Pipfile or requirements.txt. The best way to install is using **pipenv** being in the folder with Pipfile.
 
 ```
@@ -46,18 +48,18 @@ To train different model using serialized extracted features use **analyze.py** 
 python analyze.py --action ts -p models/shape.dat -m naive_bayes
 ```
 
+To train voting classifier model yourself use:
+```
+python analyze.py --action tsv -p models/shape.dat
+```
+
+
 For additional options in **analyze.py** see help:
 
 ```
 python analyze.py --help
 ```
 
-
-## Demo
-
-Please see below the demo of final emotion prediction.
-
-!TBF!
 
 ## Solution Overview
 
@@ -75,12 +77,8 @@ self.feature_names = ['EARL','L1','L2','L3', 'EARR', 'R1', 'R2', 'R3', 'MAR', 'M
 ```
 
 
-!IMAGE!
-
 The features are normalized with the normalizer caluculated based on the sum of the eucilidean distance between face gravity center point and center of each eye divide by 2.0.
 
-
-!IMAGE!
 
 
 ### Feature Engineering
@@ -198,7 +196,8 @@ For the purpose of better accuracy and f1 score, finally the voting classifer ha
 ```
 	def use_voting_classifier(self):
 		"""Method for changing to VotingClassifier."""
-		self.model = VotingClassifier(estimators=[('knn', self.models["knn"]), ('et', self.models["extra_tree"]), ('gb', self.models["gradient_boost"])], voting='hard', weights=[1.6,1,1.2])
+		self.model = VotingClassifier(estimators=[('mlp', self.models["mlp"]), ('et', self.models["extra_tree"]), ('gb', self.models["gradient_boost"])], voting='hard', weights=[1,1.5,1])
+
 ```
 
 Below there is Cross Validation(score **accuracy**) and Learning Curve for Voting Classifier.

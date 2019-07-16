@@ -66,7 +66,7 @@ class Model(object):
 
 	def use_voting_classifier(self):
 		"""Method for changing to VotingClassifier."""
-		self.model = VotingClassifier(estimators=[('knn', self.models["knn"]), ('et', self.models["extra_tree"]), ('gb', self.models["gradient_boost"])], voting='hard', weights=[1.6,1,1.2])
+		self.model = VotingClassifier(estimators=[('mlp', self.models["mlp"]), ('et', self.models["extra_tree"]), ('gb', self.models["gradient_boost"])], voting='hard', weights=[1,1.5,1])
 
 	def split_dataset(self, test_size=0.20):
 		"""Method for spliting dataset to the training and test."""
