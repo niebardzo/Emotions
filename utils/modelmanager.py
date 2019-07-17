@@ -48,10 +48,10 @@ class Model(object):
 			"naive_bayes": GaussianNB(),
 			"svm": SVC(C=15.6, gamma="scale", kernel="rbf"),
 			"decision_tree": DecisionTreeClassifier(criterion="entropy", max_depth=55, splitter="best"),
-			"random_forest": RandomForestClassifier(n_estimators=104, criterion="gini"),
+			"random_forest": RandomForestClassifier(n_estimators=50, criterion="entropy"),
 			"extra_tree": ExtraTreesClassifier(n_estimators=122, criterion="entropy"),
 			"gradient_boost": GradientBoostingClassifier(n_estimators=33, learning_rate=0.14),
-			"mlp":  MLPClassifier(solver="lbfgs", hidden_layer_sizes=(16,), alpha=5E-06)
+			"mlp":  MLPClassifier(solver="lbfgs", hidden_layer_sizes=(13, 12), alpha=5E-06)
 
 		}
 
@@ -66,7 +66,7 @@ class Model(object):
 
 	def use_voting_classifier(self):
 		"""Method for changing to VotingClassifier."""
-		self.model = VotingClassifier(estimators=[('naive_bayes', self.models["naive_bayes"]), ('et', self.models["extra_tree"]), ('gb', self.models["gradient_boost"])], voting='hard', weights=[2,3,1])
+		self.model = VotingClassifier(estimators=[('nb', self.models["naive_bayes"]), ('et', self.models["extra_tree"]), ('gb', self.models["gradient_boost"])], voting='hard', weights=[2,3,1.5])
 
 	def split_dataset(self, test_size=0.20):
 		"""Method for spliting dataset to the training and test."""

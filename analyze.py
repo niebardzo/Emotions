@@ -125,7 +125,7 @@ if args["action"][:1] == "t":
 		#for m in ms:
 		#	analytics = Analytics(m, data=data, labels=labels)
 		#	analytics.feature_selection("select_k_best", "f_classif", 8)
-		##	analytics.print_cross_val_score(cv=StratifiedKFold(5))
+		#	analytics.print_cross_val_score(cv=StratifiedKFold(5))
 		#	analytics.draw_learning_curve(cv=StratifiedKFold(5))
 		#	analytics.draw_cross_validation_scores(cv=StratifiedKFold(5))
 
