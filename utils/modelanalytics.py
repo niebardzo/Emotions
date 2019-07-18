@@ -176,7 +176,7 @@ class EstimatorSelectionHelper(Analytics):
 			self.grid_searches[key] = gs
 
 	def score_summary(self, sort_by='mean_score'):
-		"""Method for printingg the score summary and saving to the file results.csv"""
+		"""Method for printing the score summary and saving to the file results.csv"""
 		def row(key, scores, params):
 			d = {
 					'estimator': key,
@@ -193,7 +193,7 @@ class EstimatorSelectionHelper(Analytics):
 			scores = []
 			for i in range(self.grid_searches[k].cv):
 				key = "split{}_test_score".format(i)
-				r = self.grid_searches[k].cv_results_[key]        
+				r = self.grid_searches[k].cv_results_[key]
 				scores.append(r.reshape(len(params),1))
 
 			all_scores = np.hstack(scores)
