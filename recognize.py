@@ -39,7 +39,6 @@ time.sleep(1.0)
 print("[INFO] loading emotions model...")
 model = load(args['model'])
 
-buff = []
 
 while True:
 	frame = vs.read()
@@ -51,11 +50,6 @@ while True:
 		face = Face(image.gray, rect, predictor)
 
 		prediction = model.predict([face.extract_features()])
-		buff.insert(0 ,prediction[0])
-
-		if len(buff) >= 5:
-			buff.pop()
-			prediction = [most_common(buff)]
 
 
 		(x, y, w, h) = face_utils.rect_to_bb(rect)
