@@ -60,6 +60,9 @@ For additional options in **analyze.py** see help:
 python analyze.py --help
 ```
 
+**Emotion Matrix**:
+![Emotion Matrix](../master/static/emotion_matrix.png)
+
 
 ## Solution Overview
 
