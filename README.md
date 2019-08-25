@@ -2,13 +2,13 @@
 
 ## Introduction
 
-The project was reliazied as a part of Master Thesis on AGH. The purpose of the project was to create the emotion recognition application with the usage of Machine Learning methods. To achive the goal the part of Karolinska Directed Emotional Faces dataset ([KDEF](http://www.kdef.se/)) have been used. The dataset contains the photos of each emotions representation (only the frontal face image have been used - 980 samples; 140 samples for each emotion). To extract the facial landmark dlib library have been used with the pretrained model for facial landmark detection.
+The project was realized as a part of a Master Thesis on AGH. The purpose of the project was to create the emotion recognition application with the usage of Machine Learning methods. To achieve the goal the part of Karolinska Directed Emotional Faces dataset ([KDEF](http://www.kdef.se/)) have been used. The dataset contains the photos of each emotions representation (only the frontal face image have been used - 980 samples; 140 samples for each emotion). To extract the facial landmark dlib library have been used with the pre-trained model for facial landmark detection.
 
 The facial landmark detector included in the dlib library is an implementation of the One Millisecond Face Alignment with an Ensemble of Regression Trees paper by Kazemi and Sullivan (2014).
 The landmark can be download [here](http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2), also it is included in the repository under **models/shape.dat**.
 
 The method for extracting features and normalization have been presented in the Features Extraction chapter.
-Features extracted with the labels are numpy objects serialized in the folder **databases**. The final emotion classification model is serialized under the **models/emotiion.joblib**.
+Features extracted with the labels are numpy objects serialized in the folder **databases**. The final emotion classification model is serialized under the **models/emotion.joblib**.
 
 ## Requirements
 
@@ -29,20 +29,20 @@ Or use standard pip3:
 pip3 install --requirements
 ```
 
-To properly install dlib and opencv libraries please refer to the guidelines prepared by Adrian Rosebrock from [Pyimagesearch.com](https://www.pyimagesearch.com). 
+To properly install dlib and OpenCV libraries please refer to the guidelines prepared by Adrian Rosebrock from [Pyimagesearch.com](https://www.pyimagesearch.com). 
 
 https://www.pyimagesearch.com/2018/01/22/install-dlib-easy-complete-guide/
 https://www.pyimagesearch.com/2016/10/24/ubuntu-16-04-how-to-install-opencv/
 
 ## Usage
 
-To recognize the emotions use **recognize.py** specifing landmark predictor path and serialized emotion classification model path. Example usage:
+To recognize the emotions use **recognize.py**  landmark predictor path and serialized emotion classification model path. Example usage:
 
 ```
 python recognize.py -p models/shape.dat -m models/emotion.joblib
 ```
 
-To train different model using serialized extracted features use **analyze.py** script. Example usage:
+To train the different model using serialized extracted features use **analyze.py** script. Example usage:
 
 ```
 python analyze.py --action ts -p models/shape.dat -m naive_bayes
@@ -66,13 +66,13 @@ python analyze.py --help
 
 ## Solution Overview
 
-The chapter presents the solution overview. Each chapter describes the method and/or workflow how each step was implemented. Please see the diagrams describing the overall emotion detection procedure and the diagram describing the workflow of training the model.
+The chapter presents the solution overview. Each chapter describes the method and/or workflow of how each step was implemented. Please see the diagrams describing the overall emotion detection procedure and the diagram describing the workflow of training the model.
 
 ![ARCH_DIAGRAM](../master/static/arch_diagram.png)
 
 ### Features Extraction
 
-To properly analyze the image, the face features have to be extracted. The class Face have been implemented to extract the face features. There are 4 features extracted for each eye region and 5 features extracted for mouth region which gives 13 features in total.
+To properly analyze the image, the face features have to be extracted. The class Face has been implemented to extract the face features. There are 4 features extracted for each eye region and 5 features extracted for the mouth region which gives 13 features in total.
 The features have the following labels:
 
 ```
@@ -80,13 +80,13 @@ self.feature_names = ['EARL','L1','L2','L3', 'EARR', 'R1', 'R2', 'R3', 'MAR', 'M
 ```
 
 
-The features are normalized with the normalizer caluculated based on the sum of the eucilidean distance between face gravity center point and center of each eye divide by 2.0.
+The features are normalized with the normalizer calculated based on the sum of the euclidean distance between face gravity center point and center of each eye divide by 2.0.
 
 
 
 ### Feature Engineering
 
-The first point is to visualize the data that we have collected, for that purpose we utilize the functionallity of yellowbrick library for ML Visualization.
+The first point is to visualize the data that we have collected, for that purpose we utilize the functionality of the yellowbrick library for ML Visualization.
 
 
 ![RadViz_Init](../master/static/init_data.png)
@@ -97,15 +97,15 @@ and zoomed image:
 
 ![RadViz_Init_Zoomed](../master/static/init_data_zoomed.png)
 
-As we can see there is not enough spread of the data to easly distinguish between the right final class. To build the right model we should proceed with feature selection. First we evalued which features are correlated with each other by couting the pearson correlation between the features.
+As we can see there is not enough spread of the data to easily distinguish between the right final class. To build the right model we should proceed with feature selection. First, we evaluated which features are correlated with each other by counting the Pearson correlation between the features.
 
 ![Pearson](../master/static/init_pearson.png)
 
-As we can see the EAR left and EAR right possess the same information, it is because all of image faces are symetrical. The same approach is visiable in the distance between the center of the eye and eyebrow for left and right eye. The conclusion for that is that the model will be only valid for the symetric faces. At the moment, we could get rid of half of the features representing one side of the face. But let's proceed with feature analytics. Let's check the feature corelation with dependant variable:
+As we can see the EAR left and EAR right possesses the same information, it is because all of the image faces are symmetrical. The same approach is visible in the distance between the center of the eye and eyebrow for left and right eye. The conclusion for that is that the model will be only valid for the symmetric faces. At the moment, we could get rid of half of the features representing one side of the face. But let's proceed with feature analytics. Let's check the feature correlation with the dependent variable:
 
 ![Dependent_corelations](../master/static/init_corelations.png)
 
-It is clearly visiable that we can get rid off 5 least significat features and then see the data spreading again for 8 features:
+It is visible that we can get rid off 5 least significant features and then see the data spreading again for 8 features:
 
 ![8_features_data](../master/static/8_data.png)
 
@@ -115,7 +115,7 @@ and zoomed image:
 
 ![8_features_data_zoomed](../master/static/8_data_zoomed.png)
 
-It looks better, additionally if we consider that angry, sad and affraid emotions as "dissatisfied" we could achive better accuracy on that emotion.
+It looks better, additionally if we consider that angry, sad and afraid emotions as "dissatisfied" we could achieve better accuracy on that emotion.
 
 
 Saying that always 8 features will be selected out of 13 initial features. The selection is done in the pipeline.
@@ -123,43 +123,43 @@ Saying that always 8 features will be selected out of 13 initial features. The s
 
 ### Model Selection & Hyperparameter Tunning
 
-Most of the models avaiable in SKLearn Library for classifiation have been tested. Detailed list can be found below:
+Most of the models available in SKLearn Library for classification have been tested. A detailed list can be found below:
 ```
 ms = [
-			"knn",
-			"naive_bayes",
-			"svm",
-			"decision_tree",
-			"random_forest",
-			"extra_tree",
-			"gradient_boost",
-			"mlp"
-		]
+            "knn",
+            "naive_bayes",
+            "svm",
+            "decision_tree",
+            "random_forest",
+            "extra_tree",
+            "gradient_boost",
+            "mlp"
+        ]
 ```
 
-For each classification, the most significat hyper parameter have been tunned using **GridSearchCV()** class from SKLearn library. To make it easier the separate class have been made which inherits from Model class and tune hyper parameters for every class in Model.classes, with the input of parameters.
+For each classification, the most significant hyperparameter has been tunned using **GridSearchCV()** class from sklearn library. To make it easier the separate class have been made which inherits from Model class and tune hyperparameters for every class in Model.classes, with the input of parameters.
 
 ```
 params = {
-		"knn": {"n_neighbors": np.arange(1,20,1), "weights": ["uniform", "distance"],
-		"algorithm" : ["auto", "ball_tree", "kd_tree", "brute"]},
-		"naive_bayes": {},
-		"svm": {"kernel":["linear", "rbf"], "C": np.arange(0.1,50,0.5),
-		"gamma": ['auto', 'scale']},
-		"decision_tree": {"criterion": ["gini", "entropy"], "splitter": ["best", "random"], "max_depth": np.arange(5,300,1)},
-		"random_forest": {"n_estimators": np.arange(20,300,3),"criterion": ["gini", "entropy"]},
-		"extra_tree": {"n_estimators": np.arange(20,300,3),"criterion": ["gini", "entropy"]},
-		"gradient_boost": {"n_estimators": np.arange(5,60,2), "learning_rate": np.arange(0.03,0.2,0.01)},
-		"mlp": [{"hidden_layer_sizes": [ (i, ) for i in np.arange(6,20,1)], "alpha": np.arange(5e-06,5e-05,5e-06), "solver": ["lbfgs"]},
-		{"hidden_layer_sizes": [ (i, j, ) for i in np.arange(4,18,1) for j in np.arange(8,20,1)],"alpha": np.arange(5e-06,5e-05,5e-06), "solver": ["lbfgs"]}
-		]
-		}
+        "knn": {"n_neighbors": np.arange(1,20,1), "weights": ["uniform", "distance"],
+        "algorithm" : ["auto", "ball_tree", "kd_tree", "brute"]},
+        "naive_bayes": {},
+        "svm": {"kernel":["linear", "rbf"], "C": np.arange(0.1,50,0.5),
+        "gamma": ['auto', 'scale']},
+        "decision_tree": {"criterion": ["gini", "entropy"], "splitter": ["best", "random"], "max_depth": np.arange(5,300,1)},
+        "random_forest": {"n_estimators": np.arange(20,300,3),"criterion": ["gini", "entropy"]},
+        "extra_tree": {"n_estimators": np.arange(20,300,3),"criterion": ["gini", "entropy"]},
+        "gradient_boost": {"n_estimators": np.arange(5,60,2), "learning_rate": np.arange(0.03,0.2,0.01)},
+        "mlp": [{"hidden_layer_sizes": [ (i, ) for i in np.arange(6,20,1)], "alpha": np.arange(5e-06,5e-05,5e-06), "solver": ["lbfgs"]},
+        {"hidden_layer_sizes": [ (i, j, ) for i in np.arange(4,18,1) for j in np.arange(8,20,1)],"alpha": np.arange(5e-06,5e-05,5e-06), "solver": ["lbfgs"]}
+        ]
+        }
 
 ```
 
 The results are in the file under **static/results.csv**.
 
-Below you could find the few visualization.
+Below you could find the few visualizations.
 
 Learning curves for (Knn, Extra Tree, MLP and Gradient Boosting):
 
@@ -173,7 +173,7 @@ Learning curves for (Knn, Extra Tree, MLP and Gradient Boosting):
 ![LC_GB](../master/static/Learning_Curve_GB.png)
 
 
-Cross Validation charts for (Knn, Extra Tree, MLP and Gradient Boosting), the score in cross validation is **accuracy**:
+Cross-Validation charts for (Knn, Extra Tree, MLP and Gradient Boosting), the score in cross-validation is **accuracy**:
 
 ![CV_NB](../master/static/Cross_V_KNN.png)
 
@@ -194,31 +194,31 @@ Some hyper parameters tuning visualization.
 
 Not all results have been presented, but all charts can be found in **static** folder in this repo.
 
-For the purpose of better accuracy and f1 score, finally the voting classifer have been used with the following partial classifiers and weights:
+For better accuracy and f1 score, finally the voting classifier has been used with the following partial classifiers and weights:
 
 ```
-	def use_voting_classifier(self):
-		"""Method for changing to VotingClassifier."""
-		self.model = VotingClassifier(estimators=[('naive_bayes', self.models["naive_bayes"]), ('et', self.models["extra_tree"]), ('gb', self.models["gradient_boost"])], voting='hard', weights=[2,3,1.5])
+    def use_voting_classifier(self):
+        """Method for changing to VotingClassifier."""
+        self.model = VotingClassifier(estimators=[('naive_bayes', self.models["naive_bayes"]), ('et', self.models["extra_tree"]), ('gb', self.models["gradient_boost"])], voting='hard', weights=[2,3,1.5])
 
 
 ```
 
-Below there is Cross Validation(score **accuracy**) and Learning Curve for Voting Classifier.
+Below there is Cross-Validation(score **accuracy**) and Learning Curve for Voting Classifier.
 
 ![CV_Voting](../master/static/Cross_V_Voting.png)
 
 ![LC_Voting](../master/static/Learning_Curve_Voting.png)
 
-The learning curve of the voting classifier is pretty far from the training score curve, which means there can be easly more training data applied to the model.
+The learning curve of the voting classifier is pretty far from the training score curve, which means there can be easily more training data applied to the model.
 
 ### Results
 
-In this chatper there are results of clasification with Voting Classifier defined previously. The data have been splitted in to 20% of test data and 80% of training data. Below you can see the data distribution (previously the data was distributed equally through all classes):
+In this chapter there are results of classification with Voting Classifier defined previously. The data have been split into 20% of test data and 80% of training data. Below you can see the data distribution (previously the data was distributed equally through all classes):
 
 ![Class_balance](../master/static/Class_balance_after_splitting.png)
 
-Classification report below show the final results of the classification.
+Classification report below shows the final results of the classification.
 
 ![Voting_Classification_report](../master/static/Voting_Classification_report.png)
 
@@ -236,7 +236,7 @@ Kudos to Adrian Rosebrock from [Pyimagesearch.com](https://www.pyimagesearch.com
 
 ## To Do
 
-- [x] Write a docsting for each class and each method in utils.
+- [x] Write a docstring for each class and each method in utils.
 - [x] Implement Feature Selection, implement checking feature importance with plotting.
 - [x] Implement good model choosing with metrics and plotting - analyze.py -a tt
 - [x] Finish README - record a demo, add drawings and diagrams.
