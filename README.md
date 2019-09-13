@@ -86,7 +86,7 @@ The features describing the eyebrows have been presented on the image below:
 
 Based on the work by Soukupová and Čech in their 2016 paper, Real-Time Eye Blink Detection using Facial Landmarks, the features for eyes have been define as EAR:
 
-![EAR](../master/static/EAR_f.png)
+![EAR](../master/static/EAR_f.jpg)
 
 Similar feature have been used to describe the mouth, called MAR described in the A. Singh, C. Chandewar, P. Pattarkine, Driver Drowsiness Alert System with Effective Feature Extraction, International Journal for Research in Emerging Science and Technology Volume-5 Issue-4, 2018.
 
