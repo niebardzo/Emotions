@@ -42,6 +42,11 @@ To recognize the emotions use **recognize.py**  landmark predictor path and seri
 python recognize.py -p models/shape.dat -m models/emotion.joblib
 ```
 
+which results in the following demo.
+
+![RadViz_Init](../master/static/Demo.gif)
+
+
 To train the different model using serialized extracted features use **analyze.py** script. Example usage:
 
 ```
@@ -225,6 +230,10 @@ Classification report below shows the final results of the classification.
 and the prediction error chart for each class.
 
 ![Voting_pred_error](../master/static/Voting_class_prediction_error.png)
+
+The final confusions matrix presents the results of emotion recoginition for each emotion.
+
+![RadViz_Init](../master/static/Confusion_Matrix.png)
 
 ## Contact
 
