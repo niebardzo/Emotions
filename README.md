@@ -77,7 +77,24 @@ The chapter presents the solution overview. Each chapter describes the method an
 
 ### Features Extraction
 
-To properly analyze the image, the face features have to be extracted. The class Face has been implemented to extract the face features. There are 4 features extracted for each eye region and 5 features extracted for the mouth region which gives 13 features in total.
+To properly analyze the image, the face features have to be extracted. The class Face has been implemented to extract the face features. There are 3 features extracted for each eyebrows region, 1 feature for each eye region and 5 features extracted for the mouth region which gives 13 features in total.
+The features describing the eyebrows have been presented on the image below:
+![Eyebrows](../master/static/eyebrows_f.png)
+
+Based on the work by Soukupová and Čech in their 2016 paper, Real-Time Eye Blink Detection using Facial Landmarks, the features for eyes have been define as EAR:
+![EAR](../master/static/EAR_f.png)
+
+Similar feature have been used to describe the mouth, called MAR described in the A. Singh, C. Chandewar, P. Pattarkine, Driver Drowsiness Alert System with Effective Feature Extraction, International Journal for Research in Emerging Science
+and Technology Volume-5 Issue-4, 2018.
+![MAR](../master/static/MAR_f.png)
+
+Additionally, for the mouth region there have been addtional features extracted:
+![mouth](../master/static/mouth_f.png)
+
+Features that are not represented by ratio are normalized by the following normalizer:
+
+![norm](../master/static/norm_f.png)
+
 The features have the following labels:
 
 ```
