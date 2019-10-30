@@ -185,40 +185,6 @@ params = {
 
 The results are in the file under **static/results.csv**.
 
-Below you could find the few visualizations.
-
-Learning curves for (Knn, Extra Tree, MLP and Gradient Boosting):
-
-
-![LC_NB](../master/static/Learning_Curve_KNN.png)
-
-![LC_ET](../master/static/Learning_Curve_ET.png)
-
-![LC_MLP](../master/static/Learning_Curve_MLP.png)
-
-![LC_GB](../master/static/Learning_Curve_GB.png)
-
-
-Cross-Validation charts for (Knn, Extra Tree, MLP and Gradient Boosting), the score in cross-validation is **accuracy**:
-
-![CV_NB](../master/static/Cross_V_KNN.png)
-
-![CV_ET](../master/static/Cross_V_ET.png)
-
-![CV_MLP](../master/static/Cross_V_MLP.png)
-
-![CV_MLP](../master/static/Cross_V_GB.png)
-
-Some hyper parameters tuning visualization.
-
-![VC_MLP](../master/static/Validation_Curve_MLP.png)
-
-![VC_ET](../master/static/Validation_Curve_KNN.png)
-
-![VC_SVC](../master/static/Validation_Curve_SVC.png)
-
-
-Not all results have been presented, but all charts can be found in **static** folder in this repo.
 
 For better accuracy and f1 score, finally the voting classifier has been used with the following partial classifiers and weights:
 
